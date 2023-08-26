@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "vTNnhLmKr7oGWLZQnWj/rCd6DkV1gAGCJ9zQvfScAQs=",
+  "Source": "C#Rest-chat-server",
+  "BasePath": "_content/C#Rest-chat-server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
