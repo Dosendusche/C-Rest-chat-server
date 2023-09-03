@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using C_Rest_chat_server.Entities;
 
 namespace C_Rest_chat_server.Repositories
@@ -14,31 +16,35 @@ namespace C_Rest_chat_server.Repositories
             new User { Id = Guid.NewGuid(), Name = "user3", Email = "test3@mail.com", Password = "ThisWillLaterBeEncryptedPasswords", CreatedDate = DateTimeOffset.UtcNow }
         };
 
-        public IEnumerable<User> GetUsers()
+        public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            return users;
+            return await Task.FromResult(users);
         }
 
-        public User GetUser(Guid id)
+        public async Task<User> GetUserAsync(Guid id)
         {
-            return users.Where(item => item.Id == id).SingleOrDefault();
+            var user = users.Where(item => item.Id == id).SingleOrDefault();
+            return await Task.FromResult(user);
         }
 
-        public void CreateUser(User user)
+        public async Task CreateUserAsync(User user)
         {
             users.Add(user);
+            await Task.CompletedTask;
         }
 
-        public void UpdateUser(User user)
+        public async Task UpdateUserAsync(User user)
         {
             int index = users.FindIndex(listUser => listUser.Id == user.Id);
             users[index] = user;
+            await Task.CompletedTask;
         }
 
-        public void DeleteUser(Guid id)
+        public async Task DeleteUserAsync(Guid id)
         {
             int index = users.FindIndex(listUser => listUser.Id == id);
             users.RemoveAt(index);
+            await Task.CompletedTask;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using C_Rest_chat_server.Entities;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
@@ -20,32 +21,32 @@ namespace C_Rest_chat_server.Repositories
             userCollection = database.GetCollection<User>(collectionName);
         }
 
-        public void CreateUser(User user)
+        public async Task CreateUserAsync(User user)
         {
-            userCollection.InsertOne(user);
+            await userCollection.InsertOneAsync(user);
         }
 
-        public void DeleteUser(Guid id)
-        {
-            FilterDefinition<User> filter = filterDefinitionBuilder.Eq(existUser => existUser.Id, id);
-            userCollection.DeleteOne(filter);
-        }
-
-        public User GetUser(Guid id)
+        public async Task DeleteUserAsync(Guid id)
         {
             FilterDefinition<User> filter = filterDefinitionBuilder.Eq(existUser => existUser.Id, id);
-            return userCollection.Find(filter).SingleOrDefault();
+            await userCollection.DeleteOneAsync(filter);
         }
 
-        public IEnumerable<User> GetUsers()
+        public async Task<User> GetUserAsync(Guid id)
         {
-            return userCollection.Find(new BsonDocument()).ToList();
+            FilterDefinition<User> filter = filterDefinitionBuilder.Eq(existUser => existUser.Id, id);
+            return await userCollection.Find(filter).SingleOrDefaultAsync();
         }
 
-        public void UpdateUser(User user)
+        public async Task<IEnumerable<User>> GetUsersAsync()
+        {
+            return await userCollection.Find(new BsonDocument()).ToListAsync();
+        }
+
+        public async Task UpdateUserAsync(User user)
         {
             FilterDefinition<User> filter = filterDefinitionBuilder.Eq(existUser => existUser.Id, user.Id);
-            userCollection.ReplaceOne(filter, user);
+            await userCollection.ReplaceOneAsync(filter, user);
         }
     }
 }

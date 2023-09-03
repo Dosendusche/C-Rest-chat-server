@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using C_Rest_chat_server.Dtos;
 using C_Rest_chat_server.Entities;
 using C_Rest_chat_server.Repositories;
@@ -23,17 +24,17 @@ namespace C_Rest_chat_server.Controllers
 
         // GET /users
         [HttpGet]
-        public IEnumerable<UserDto> GetUsers()
+        public async Task<IEnumerable<UserDto>> GetUsersAsync()
         {
-            var users = repository.GetUsers().Select(user => user.ToDto());
+            var users = (await repository.GetUsersAsync()).Select(user => user.ToDto());
             return users;
         }
 
         // Get /users/{id}
         [HttpGet("{id}")]
-        public ActionResult<UserDto> GetUser(Guid id)
+        public async Task<ActionResult<UserDto>> GetUserAsync(Guid id)
         {
-            User user = repository.GetUser(id);
+            User user = await repository.GetUserAsync(id);
             if (user is null)
             {
                 return NotFound();
@@ -43,7 +44,7 @@ namespace C_Rest_chat_server.Controllers
 
         // POST /users
         [HttpPost]
-        public ActionResult<UserDto> CreateUser(CreateUserDto createUserDto)
+        public async Task<ActionResult<UserDto>> CreateUserAsync(CreateUserDto createUserDto)
         {
             User user = new()
             {
@@ -53,15 +54,15 @@ namespace C_Rest_chat_server.Controllers
                 Password = createUserDto.Password,
                 CreatedDate = DateTimeOffset.UtcNow
             };
-            repository.CreateUser(user);
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user.ToDto());
+            await repository.CreateUserAsync(user);
+            return CreatedAtAction(nameof(GetUserAsync), new { id = user.Id }, user.ToDto());
         }
 
         // PATCH /users/{id}
         [HttpPatch("{id}")]
-        public ActionResult UpdateUser(Guid id, UpdateUserDto userDto)
+        public async Task<ActionResult> UpdateUserAsync(Guid id, UpdateUserDto userDto)
         {
-            User existingUser = repository.GetUser(id);
+            User existingUser = await repository.GetUserAsync(id);
             if (existingUser is null)
             {
                 return NotFound();
@@ -73,21 +74,21 @@ namespace C_Rest_chat_server.Controllers
                 Email = userDto.Email,
                 Password = userDto.Password,
             };
-            repository.UpdateUser(updatedUser);
+            await repository.UpdateUserAsync(updatedUser);
 
             return NoContent();
         }
 
         // DELETE /users/{id}
-        [HttpDelete]
-        public ActionResult DeleteUser(Guid id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUserAsync(Guid id)
         {
-            User existingUser = repository.GetUser(id);
+            User existingUser = await repository.GetUserAsync(id);
             if (existingUser is null)
             {
                 return NotFound();
             }
-            repository.DeleteUser(id);
+            await repository.DeleteUserAsync(id);
 
             return NoContent();
         }

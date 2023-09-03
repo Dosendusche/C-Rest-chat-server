@@ -43,7 +43,10 @@ namespace C_Rest_chat_server
 
             services.AddSingleton<IUsersRepository, MongoDBUsersRepository>();
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.SuppressAsyncSuffixInActionNames = false;
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "C_Rest_chat_server", Version = "v1" });
