@@ -1,3 +1,3 @@
 {
-    "dotnet.defaultSolution": "C#Rest-chat-server.sln"
+    "dotnet.defaultSolution": "CrestChatServer/C#Rest-chat-server.sln"
 }

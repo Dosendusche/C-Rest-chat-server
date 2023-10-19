@@ -1,0 +1,29 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  crestchatserver:
+    image: crestchatserver
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - MongoDbSettings__Host=db
+      - MongoDbSettings__Port=27017
+      - MongoDbSettings__User=
+      - MongoDbSettings__Password=
+    ports:
+      - '5000:5000'
+  db:
+    image: mongo:7.0-jammy
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=
+      - MONGO_INITDB_ROOT_PASSWORD=
+    ports:
+      - '27017:27017'
+    volumes:
+      - 'c_rest_chat:/data/db'
+
+volumes:
+  c_rest_chat:

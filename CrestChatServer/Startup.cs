@@ -43,7 +43,6 @@ namespace C_Rest_chat_server
 
             services.AddSingleton<IMongoClient>(ServiceProvider =>
             {
-
                 return new MongoClient(mongoDbSettings.ConnectionString);
             });
 
@@ -76,7 +75,10 @@ namespace C_Rest_chat_server
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "C_Rest_chat_server v1"));
             }
 
-            app.UseHttpsRedirection();
+            if (env.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseRouting();
 
